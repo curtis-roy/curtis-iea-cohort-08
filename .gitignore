@@ -20,5 +20,6 @@ pyvenv.cfg
 *.ods#
 *.docx#
 *.rpm
+*.pptx#
 
 __pycache__
