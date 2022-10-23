@@ -1,6 +1,6 @@
 #!/bin/env python3
 
-"""Test flask app for docker lab.  Cleaned up for PEP8 specs."""
+"""Test flask app for docker lab."""
 
 import os
 from flask import Flask, redirect, request, url_for
@@ -9,10 +9,9 @@ signatures = []
 
 app = Flask(__name__)
 
-font = os.environ["DISPLAY_FONT"] = "arial"
-font_color = os.environ["DISPLAY_COLOR"] = "red"
-environment = os.environ["ENVIRONMENT"] = "MARVIN"
-
+FONT = os.environ["DISPLAY_FONT"] = "arial"
+FONT_COLOR = os.environ["DISPLAY_COLOR"] = "green"
+ENVIRONMENT = os.environ["ENVIRONMENT"] = "Heart_of_Gold"
 
 @app.route("/", methods=["GET"])
 def index():
@@ -34,10 +33,10 @@ def index():
     """
     messages_html = "<br />".join(signatures)
     return html % {
-        "font": font,
-        "color": font_color,
+        "font": FONT,
+        "color": FONT_COLOR,
         "messages": messages_html,
-        "environment": environment,
+        "environment": ENVIRONMENT,
     }
 
 
