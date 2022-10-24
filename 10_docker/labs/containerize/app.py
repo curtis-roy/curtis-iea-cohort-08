@@ -9,9 +9,13 @@ signatures = []
 
 app = Flask(__name__)
 
-FONT = os.environ["DISPLAY_FONT"] = "arial"
-FONT_COLOR = os.environ["DISPLAY_COLOR"] = "green"
-ENVIRONMENT = os.environ["ENVIRONMENT"] = "Heart_of_Gold"
+FONT = os.environ["DISPLAY_FONT"]
+FONT_COLOR = os.environ["DISPLAY_COLOR"]
+ENVIRONMENT = os.environ["ENVIRONMENT"]
+
+# FONT = os.environ["DISPLAY_FONT"] = "arial"
+# FONT_COLOR = os.environ["DISPLAY_COLOR"] = "green"
+# ENVIRONMENT = os.environ["ENVIRONMENT"] = "Heart_of_Gold"
 
 @app.route("/", methods=["GET"])
 def index():
