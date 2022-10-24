@@ -9,11 +9,12 @@ RUN pip3 install Flask
 COPY . .
 EXPOSE 8080
 
-# TODO Set default values for env variables
+ENV ENVIRONMENT=DEV
+ENV DISPLAY_FONT=arial
+ENV DISPLAY_COLOR=green
 
-# RUN addgroup -S appgroup
-# RUN adduser -S -H -D marvin -G appgroup
-# USER marvin
+RUN addgroup -S appgroup && adduser -S -D marvin -G appgroup
+USER marvin
 
 #HEALTHCHECK
 CMD python3 /app/app.py
