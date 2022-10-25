@@ -13,8 +13,9 @@ ENV ENVIRONMENT=DEV
 ENV DISPLAY_FONT=arial
 ENV DISPLAY_COLOR=green
 
-RUN addgroup -S appgroup && adduser -S -D marvin -G appgroup
-USER marvin
+USER 1000
 
-HEALTHCHECK --duration=15s \
-  CMD python3 /app/app.py || exit 1
+CMD python3 /app/app.py
+
+HEALTHCHECK --interval=30s --timeout=3s \
+  CMD curl -f http://localhosed/ || exit 1
