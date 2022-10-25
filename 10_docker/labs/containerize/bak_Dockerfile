@@ -16,5 +16,5 @@ ENV DISPLAY_COLOR=green
 RUN addgroup -S appgroup && adduser -S -D marvin -G appgroup
 USER marvin
 
-HEALTHCHECK --duration=15s \
-  CMD python3 /app/app.py || exit 1
+#HEALTHCHECK
+CMD python3 /app/app.py
