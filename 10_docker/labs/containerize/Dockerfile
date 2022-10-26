@@ -15,7 +15,7 @@ ENV DISPLAY_COLOR=green
 
 USER 1000
 
-CMD python3 /app/app.py
+HEALTHCHECK --interval=15s --timeout=3s \
+  CMD ping -s 2 -c 2 -q 127.0.0.1:8080 || exit 1
 
-HEALTHCHECK --interval=30s --timeout=3s \
-  CMD curl -f http://localhosed/ || exit 1
+CMD python3 /app/app.py

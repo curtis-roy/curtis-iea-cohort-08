@@ -3,15 +3,7 @@
 """Test flask app for docker lab."""
 
 import os
-import logging
-import sys
 from flask import Flask, redirect, request, url_for
-
-logging.basicConfig(
-    format="%(name)s - %(levelname)s - %(message)s",
-    level=logging.DEBUG,
-    stream=sys.stdout,
-)
 
 signatures = []
 
@@ -20,7 +12,6 @@ app = Flask(__name__)
 FONT = os.environ["DISPLAY_FONT"]
 FONT_COLOR = os.environ["DISPLAY_COLOR"]
 ENVIRONMENT = os.environ["ENVIRONMENT"]
-
 
 @app.route("/", methods=["GET"])
 def index():
