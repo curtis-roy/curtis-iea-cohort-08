@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment-v1
+  labels:
+    app: http-app
+    version: v1
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: http-app
+  template:
+    metadata:
+      labels:
+        app: http-app
+        version: v1
+    spec:
+      containers:
+      - name: http-app
+        image: acmeade/http-app:v1
+        ports:
+        - containerPort: 80

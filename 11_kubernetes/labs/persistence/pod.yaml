@@ -1,0 +1,15 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: web-server-pod
+spec:
+  containers:
+    - name: frontend
+      image: nginx
+      volumeMounts:
+      - mountPath: "/usr/share/nginx/html"
+        name: static-files
+  volumes:
+    - name: static-files
+      persistentVolumeClaim:
+        claimName: static-files
