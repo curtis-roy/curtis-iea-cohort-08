@@ -16,9 +16,9 @@ pyvenv.cfg
 /02_linux_bash_scripting/images/
 /03_mastering_git/
 
-# individual files
+# individual file types
+*.~lock*
 *.ods#
-*.docx#
 *.rpm
 *.pptx#
 
