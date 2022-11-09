@@ -5,6 +5,7 @@ lib/
 lib64
 share/
 pyvenv.cfg
+aws_ubuntu.sh
 
 # ignore Jupyter notebook checkpoints
 .ipynb_checkpoints/
