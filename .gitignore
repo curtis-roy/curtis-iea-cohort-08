@@ -24,3 +24,16 @@ aws_ubuntu.sh
 *.pptx#
 
 __pycache__
+
+
+# Demo virtualenvs
+08_ansible/demos/ansible_demo
+10_docker/demos/venv
+
+
+# Libreoffice lock files
+.~lock*
+
+
+# Vim backup files
+*.swp
