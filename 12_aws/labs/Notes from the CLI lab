@@ -1,0 +1,133 @@
+create-keypair.py from the CLI lab
+------------------
+#!/usr/bin/env python
+
+import boto3
+
+# Connect to the Amazon EC2 service
+ec2_client = boto3.client('ec2')
+
+# Create a Key Pair
+key = ec2_client.create_key_pair(KeyName = 'SDK')
+
+# Print the private Fingerprint of the private key
+# NOTE:  normally this would be put in a file, not printed to stdout
+print(key.get('KeyFingerprint'))
+
+------------------
+cleanup-keypairs.py from the CLI lab
+
+#!/usr/bin/env python
+
+import boto3
+
+# Connect to the Amazon EC2 service
+ec2_client = boto3.client('ec2')
+
+keypairs = ec2_client.describe_key_pairs()
+
+for key in keypairs['KeyPairs']:
+  if 'lab' not in key['KeyName'].lower():
+    print ("Deleting key pair", key ['KeyName'])
+    ec2_client.delete_key_pair(KeyName=key['KeyName'])
+------------------
+
+Make a bucket:  aws s3 mb s3://data-11132022
+Copy a file to a bucket:  aws s3 cp create-keypair.py s3://data-11132022
+List files in a bucket:  aws s3 ls s3://data-11132022
+Synchronize bucket:  aws s3 sync . s3://data-11132022
+Create a snapshot of an EBS volume:  aws ec2 create-snapshot --description CLI --volume-id vol-0354836d45863ec25
+
+------------------
+snapshotter.py from the CLI lab
+
+#!/usr/bin/env python
+
+import boto3
+import datetime
+
+MAX_SNAPSHOTS = 2   # Number of snapshots to keep
+
+# Connect to the Amazon EC2 service
+ec2 = boto3.resource('ec2')# Loop through each volumefor volume in ec2.volumes.all():  # Create a snapshot of the volume with the current time as a Description  new_snapshot = volume.create_snapshot(Description = str(datetime.datetime.now()))  print ("Created snapshot " + new_snapshot.id)
+  # Too many snapshots?
+  snapshots = list(volume.snapshots.all())
+  if len(snapshots) > MAX_SNAPSHOTS:
+
+    # Delete oldest snapshots, but keep MAX_SNAPSHOTS available
+    snapshots_sorted = sorted([(s, s.start_time) for s in snapshots], key=lambda k: k[1])
+    for snapshot in snapshots_sorted[:-MAX_SNAPSHOTS]:
+      print ("Deleted snapshot " + snapshot[0].id)
+      snapshot[0].delete()
+------------------
+
+stopinator.py from the CLI lab:
+
+#!/usr/bin/env python
+
+import boto3
+
+# Connect to the Amazon EC2 service
+ec2 = boto3.resource('ec2')
+
+# Loop through each instance
+for instance in ec2.instances.all():  state = instance.state['Name']  for tag in instance.tags:    # Check for the 'stopinator' tag    if tag['Key'] == 'stopinator':      action = tag['Value'].lower()      # Stop?
+      if action == 'stop' and state == 'running':
+        print ("Stopping instance", instance.id)
+        instance.stop()
+
+      # Terminate?
+      elif action == 'terminate' and state != 'terminated':
+        print ("Terminating instance", instance.id)
+        instance.terminate()
+
+------------------
+
+Sending metrics via the CLI:  aws cloudwatch put-metric-data --namespace Lab --metric-name CWR --value 42
+Cloudwatch lab did not work!  No additional test data was sent even after 10 minutes of playing the game repeatedly.  Moving on.
+
+
+
+
+------------------
+highlow.py from the CLI lab (to generate metrics)
+
+#!/usr/bin/env python
+
+import random, time, sys
+import boto3
+
+# Connect to the Amazon EC2 service
+cloudwatch_client = boto3.client('cloudwatch')
+# Let them guesscount = 0while True:  # Start of game?  if count == 0:    start_time = time.time()    num = random.randint(1, 100)
+    print ("I\'m thinking of a number from 1 to 100. Try to guess it! (Enter 0 to exit)")
+
+  # Guess a number
+  guess = int(input(">"))
+  count += 1
+
+  # Respond
+  if guess == 0:
+    # End game
+    sys.exit()
+  elif guess < num:
+    print("Too low!")
+  elif guess > num:
+    print ("Too high!")
+  else:
+    # Correct answer
+    seconds = int(time.time() - start_time)
+    print ("That's correct! It took you %d guesses and %d seconds.\n" % (count, seconds))
+
+    # Push metric to CloudWatch
+    cloudwatch_client.put_metric_data(Namespace="Lab", MetricData=[{'MetricName':'highlow', 'Value':seconds}])
+    print ("The metric has been sent to CloudWatch.\n")
+
+    # Start again
+    count = 0
+
+------------------
+Link to the AWS CLI:
+http://aws.amazon.com/cli/
+
+Documentation for the SDKs:  https://aws.amazon.com/documentation/#SDKs_and_Toolkits
